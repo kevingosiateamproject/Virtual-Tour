@@ -8,7 +8,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
-    private Vector3 cameraRotation = Vector3.zero;
+    private float cameraRotationX = 0f;
+    private float currentCameraRotationX = 0f;
+    private Vector3 Force = Vector3.zero;
+
+    [SerializeField]
+    private float cameraRotationLimit = 85f;
 
     private Rigidbody rb;
 
@@ -29,9 +34,15 @@ public class PlayerMovement : MonoBehaviour
         rotation = _rotation;
     }
 
-    public void RotateCamera(Vector3 _cameraRotation)
+    public void RotateCamera(float _cameraRotationX)
     {
-        cameraRotation = _cameraRotation;
+        cameraRotationX = _cameraRotationX;
+    }
+
+    // Gets a force vector
+    public void ApplyForce(Vector3 _Force)
+    {
+        Force = _Force;
     }
 
     // Runs every physics iteration
@@ -51,6 +62,11 @@ public class PlayerMovement : MonoBehaviour
             // Here we move the Rigidbody of the player in real time based on the velocity.
             rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
         }
+
+        if(Force != Vector3.zero)
+        {
+            rb.AddForce(Force * Time.fixedDeltaTime, ForceMode.Acceleration);
+        }
     }
 
     void PerformRotation()
@@ -58,7 +74,14 @@ public class PlayerMovement : MonoBehaviour
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
         if(cam != null)
         {
-            cam.transform.Rotate(-cameraRotation);
+            //New rotational calculation
+            currentCameraRotationX -= cameraRotationX;
+            // Mathf.Clamp will clamp the currentCameraRotationX between the next two values
+            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+
+            // The rotation as Euler angles in degrees relative to the parent transform's rotation.
+            // Apply our rotation to the transform of our camera
+            cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
         }
     }
 }

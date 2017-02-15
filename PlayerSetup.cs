@@ -19,8 +19,7 @@ public class PlayerSetup : NetworkBehaviour {
             {
                 componenetsToDisable[i].enabled = false;
             }
-        }
-        else
+        } else
         {
             // Disables the main camera when we join the museum 
             sceneCamera = Camera.main;
