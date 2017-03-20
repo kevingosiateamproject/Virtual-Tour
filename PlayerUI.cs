@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class PlayerUI : MonoBehaviour {
 
-	[SerializeField]
-	GameObject pauseMenu;
+    [SerializeField]
+    GameObject pauseMenu;
 
-	void Start ()
+    void Start ()
 	{
 		PauseMenu.IsOn = false;
 	}
@@ -19,10 +19,9 @@ public class PlayerUI : MonoBehaviour {
 		}
     }
 
-	public void TogglePauseMenu ()
+    public void TogglePauseMenu ()
 	{
 		pauseMenu.SetActive(!pauseMenu.activeSelf);
 		PauseMenu.IsOn = pauseMenu.activeSelf;
     }
-
 }

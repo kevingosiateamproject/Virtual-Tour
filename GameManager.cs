@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-
     private const string PLAYER_ID_PREFIX = "Player";
 
     // Stores all current Players
